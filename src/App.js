@@ -1,53 +1,51 @@
-import React, { useEffect, useState } from "react";
-import TodoForm from "./components/TodoForm";
-import TodoList from "./components/TodoList";
+import React, { useState } from "react";
+import styled from "@emotion/styled";
+import GRCard from "./components/cards/GRCard";
+import TodoForm from "./TodoForm";
+import TodoActions from "./TodoActions";
 
-const App = () => {
-  const LOCAL_STORAGE_KEY = "react-todo-list-todos";
+interface AppProps {}
+
+const App = ({}: AppProps) => {
   const [todos, setTodos] = useState([]);
 
-  useEffect(() => {
-    const storageTodos = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
-    if (storageTodos) {
-      setTodos(storageTodos);
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(todos));
-  }, [todos]);
-
-  const addTodo = (todo) => {
+  function addTodo(todo) {
     setTodos([todo, ...todos]);
-  };
-
-  const toggleComplete = (id) => {
-    setTodos(
-      todos.map((todo) => {
-        if (todo.id === id) {
-          return {
-            ...todo,
-            checked: !todo.checked,
-          };
-        }
-        return todo;
-      })
-    );
-  };
-
-  const removeTodo = (id) => {
-    setTodos(todos.filter((todo) => todo.id !== id));
-  };
+  }
   return (
-    <div>
-      <TodoForm addTodo={addTodo} />
-      <TodoList
-        todos={todos}
-        toggleComplete={toggleComplete}
-        removeTodo={removeTodo}
+    <Container>
+      <GRCard
+        title={"Test technique GeoRide :"}
+        subTitle={
+          <SubTitle>
+            Faire une todo list en React avec <p>une api</p>
+          </SubTitle>
+        }
       />
-    </div>
+      <TodoForm addTodo={addTodo} />
+      <TodoActions todos={todos} />
+    </Container>
   );
 };
 
 export default App;
+
+const Container = styled.div`
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const SubTitle = styled.p`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-decoration: underline wavy #fcb466;
+
+  > p {
+    margin-left: 5px;
+    font-style: italic;
+  }
+`;
